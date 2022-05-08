@@ -1,0 +1,18 @@
+{
+  "name": "template-bot",
+  "version": "1.0.0",
+  "description": "A Discord Bot (Eris) template from Blob Project.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.6.0",
+    "eris": "^0.15.1",
+    "pluris": "^0.3.5"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "license": "MIT"
+}
