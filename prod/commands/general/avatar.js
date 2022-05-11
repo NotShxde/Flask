@@ -10,24 +10,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const embed_1 = require("../../utils/embed");
+const parse_1 = require("../../utils/parse");
 const permissionInt_1 = require("../../utils/permissionInt");
-const ms = require("ms");
-exports.run = (client, message) => __awaiter(void 0, void 0, void 0, function* () {
-    let embed = new embed_1.Embed()
-        .setAuthor("Flask: Uptime", "https://invite.giveawayboat.com/", client.user.avatarURL)
-        .addField("**Active For**:", ms(client.uptime, { long: true }))
-        .addField("**Total Shards**", `${client.shards.size}`)
-        .setColor("#15f153");
-    message.channel.createMessage({ embed: embed });
+exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
+    let usr = args[0];
+    if (!usr) {
+        usr = message.author.mention;
+    }
+    let user = (0, parse_1.pmention)(usr, client);
+    let em = new embed_1.Embed()
+        .setAuthor("Flask: Avatar", "https://invite.giveawayboat.com/", client.user.avatarURL)
+        .setTimestamp(new Date())
+        .setImage(user.dynamicAvatarURL("webp", 256))
+        .setFooter("Flask ", client.user.avatarURL);
+    message.channel.createMessage({ embed: em });
 });
 exports.help = {
-    name: "uptime",
-    description: "shows how long bot has been active",
-    usage: "!uptime",
-    example: "!uptime",
+    name: "avatar",
+    description: "Displays Avatar",
+    usage: "-avatar @user",
+    example: "-avatar @wumpus",
     perms: [permissionInt_1.Permission.SEND_MESSAGES]
 };
 exports.conf = {
-    aliases: ["up"],
-    cooldown: 5 // Seconds
+    aliases: ["av"],
+    cooldown: 2 // Seconds
 };

@@ -1,5 +1,6 @@
 import Eris from "eris";
 import { Embed } from "../../utils/embed";
+import { Permission } from "../../utils/permissionInt";
 const ms = require("ms");
 exports.run = async (client: Eris.Client, message:any) => {
     let embed = new Embed()
@@ -15,7 +16,8 @@ exports.help = {
   name: "uptime",
   description: "shows how long bot has been active",
   usage: "!uptime",
-  example: "!uptime"
+  example: "!uptime",
+  perms: [Permission.SEND_MESSAGES]
 };
 
 exports.conf = {

@@ -14,7 +14,8 @@ exports.help = {
     name: "",
     description: "",
     usage: "",
-    example: ""
+    example: "",
+    perms: []
 };
 exports.conf = {
     aliases: [],

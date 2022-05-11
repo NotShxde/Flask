@@ -8,7 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const eris_1 = __importDefault(require("eris"));
+const embed_1 = require("../utils/embed");
+let permsnothave = 0;
 module.exports = (client, message) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     if (message.author.bot)
         return;
     if (message.channel.type === 1)
@@ -23,6 +31,32 @@ module.exports = (client, message) => __awaiter(void 0, void 0, void 0, function
     let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
     if (!commandFile)
         return;
+    let permissionRequired = commandFile.help.perms;
+    let sh = (_a = message.member) === null || _a === void 0 ? void 0 : _a.permissions;
+    let slh = (_b = message.member) === null || _b === void 0 ? void 0 : _b.permissions.json;
+    let em = new embed_1.Embed()
+        .setAuthor("Flask: Permissions", "https://invite.giveawayboat.com/", client.user.avatarURL)
+        .setDescription(`The Following Permissions Are Require For Executing This Command`);
+    if (slh) {
+        console.log(sh);
+        permissionRequired.forEach((p) => {
+            //@ts-ignore
+            if (!sh.has(p)) {
+                //@ts-ignore
+                em.addField(`Permission Integer ${eris_1.default.Constants.Permissions[p]}`, `${p}`, false);
+                permsnothave = permsnothave + 1;
+                console.log("one perm mission ");
+            }
+            else {
+                permsnothave = permsnothave + 0;
+                console.log("haha");
+            }
+        });
+    }
+    if (permsnothave >= 1) {
+        permissionRequired = 0;
+        return message.channel.createMessage({ embed: em });
+    }
     if (!client.cooldowns.has(commandFile.help.name))
         client.cooldowns.set(commandFile.help.name, client.cooldowns);
     const member = message.member, now = Date.now(), timestamps = client.cooldowns.get(commandFile.help.name), cooldownAmount = (commandFile.conf.cooldown || 3) * 1000;
@@ -45,10 +79,12 @@ module.exports = (client, message) => __awaiter(void 0, void 0, void 0, function
         if (!commandFile)
             return;
         commandFile.run(client, message, args);
+        console.log(args);
     }
     catch (error) {
         console.log(error.message);
-    } //finally {
-    // console.log(`${sender.username}#${sender.discriminator} ran a command: ${cmd}`);
-    //}
+    }
+    finally {
+        console.log(`${sender.username}#${sender.discriminator} ran a command: ${cmd}`);
+    }
 });

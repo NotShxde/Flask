@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const permissionInt_1 = require("../../utils/permissionInt");
 exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
     const startTime = Date.now();
     const messageSent = yield message.channel.createMessage('ping');
@@ -27,7 +28,8 @@ exports.help = {
     name: "ping",
     description: "Displays Bots Ping",
     usage: "Ping",
-    example: "!ping"
+    example: "!ping",
+    perms: [permissionInt_1.Permission.SEND_MESSAGES]
 };
 exports.conf = {
     aliases: [],

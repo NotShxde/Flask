@@ -4,6 +4,8 @@
   - https://abal.moe/Eris/docs/reference
 */
 
+import { DiscordRESTError } from "eris";
+
 const bot = require("./handler/Client.js");
 require('dotenv').config();
 
@@ -16,7 +18,12 @@ const client = new bot(`Bot ${process.env.SECRET}`, { // https://abal.moe/Eris/d
 require("../prod/handler/Module.js")(client);
 require("../prod/handler/Event.js")(client);
 
+process.on('unhandledRejection', (error) => {
+  if (error instanceof DiscordRESTError) return;
+
+  console.error('Uncaught Promise Error: ', error);
+});
+
 client.connect();
 
 export const Flask =  bot
-export default { Flask: Flask } 

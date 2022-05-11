@@ -1,4 +1,5 @@
 import Eris from "eris"
+import { Permission } from "../../utils/permissionInt";
 
 exports.run = async (client:Eris.Message, message:Eris.Message, args:any[]) => {
   const startTime = Date.now();
@@ -19,7 +20,8 @@ exports.help = {
   name: "ping",
   description: "Displays Bots Ping",
   usage: "Ping" ,
-  example: "!ping"
+  example: "!ping",
+  perms: [Permission.SEND_MESSAGES]
 }
 
 exports.conf = {

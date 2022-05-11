@@ -1,3 +1,6 @@
+import Eris from "eris";
+import { Embed } from "../utils/embed";
+let permsnothave:number = 0;
 module.exports = async (client:any, message:any) => {
   if (message.author.bot) return;
   
@@ -15,6 +18,37 @@ module.exports = async (client:any, message:any) => {
   let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
   if (!commandFile) return;
 
+  let permissionRequired = commandFile.help.perms;
+  let sh = message.member?.permissions
+  let slh = message.member?.permissions.json;
+  let em = new Embed()
+      .setAuthor("Flask: Permissions","https://invite.giveawayboat.com/",client.user.avatarURL)
+      .setDescription(`The Following Permissions Are Require For Executing This Command`)
+      
+      
+  if(slh){
+    console.log(sh)
+    permissionRequired.forEach((p:any) => {
+      //@ts-ignore
+      if (!sh.has(p)) {
+        //@ts-ignore
+        em.addField(`Permission Integer ${Eris.Constants.Permissions[p]}`, `${p}`, false)
+        permsnothave = permsnothave + 1
+        console.log("one perm mission " )
+      } else {
+        permsnothave = permsnothave + 0
+        console.log("haha")
+      }
+
+    },
+   
+    );
+
+  }
+  if(permsnothave >= 1){
+    permissionRequired = 0
+   return message.channel.createMessage({embed:em})
+  }
   if (!client.cooldowns.has(commandFile.help.name)) client.cooldowns.set(commandFile.help.name, client.cooldowns);
   
   const member = message.member, now = Date.now(), timestamps = client.cooldowns.get(commandFile.help.name), cooldownAmount = (commandFile.conf.cooldown || 3) * 1000;
@@ -38,9 +72,10 @@ module.exports = async (client:any, message:any) => {
   try {
     if (!commandFile) return;
     commandFile.run(client, message, args);
+    console.log(args)
   } catch (error:any) {
     console.log(error.message);
-  } //finally {
-   // console.log(`${sender.username}#${sender.discriminator} ran a command: ${cmd}`);
-  //}
+  } finally {
+    console.log(`${sender.username}#${sender.discriminator} ran a command: ${cmd}`);
+  }
 }

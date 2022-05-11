@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const embed_1 = require("../../utils/embed");
+const permissionInt_1 = require("../../utils/permissionInt");
 exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
     let prefix = client.config.prefix;
     if (!args[0]) {
@@ -43,6 +44,7 @@ exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, funct
             let aliases = command.conf.aliases.join(", ") ? command.conf.aliases.join(", ") : "No aliases provided.";
             let usage = command.help.usage ? command.help.usage : "No usage provided.";
             let example = command.help.example ? command.help.example : "No example provided.";
+            let permissions = command.help.perms.join(", ") ? command.help.perms.join(", ") : "No Permission's Require.";
             let embed = new embed_1.Embed()
                 .setColor(0x1d1d1d)
                 .setTitle(name)
@@ -52,7 +54,8 @@ exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, funct
                 .addField("Cooldown", cooldown)
                 .addField("Aliases", aliases, true)
                 .addField("Usage", usage, true)
-                .addField("Example", example, true);
+                .addField("Example", example, true)
+                .addField("Permissions", permissions, true);
             return message.channel.createMessage({ embed: embed });
         }
         else {
@@ -65,7 +68,8 @@ exports.help = {
     name: "help",
     description: "Displays Commands About THe Bit",
     usage: "-help",
-    example: "-help ping"
+    example: "-help ping",
+    perms: [permissionInt_1.Permission.SEND_MESSAGES]
 };
 exports.conf = {
     aliases: ['hp'],

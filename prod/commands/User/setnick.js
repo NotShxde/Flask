@@ -11,23 +11,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const embed_1 = require("../../utils/embed");
 const permissionInt_1 = require("../../utils/permissionInt");
-const ms = require("ms");
-exports.run = (client, message) => __awaiter(void 0, void 0, void 0, function* () {
-    let embed = new embed_1.Embed()
-        .setAuthor("Flask: Uptime", "https://invite.giveawayboat.com/", client.user.avatarURL)
-        .addField("**Active For**:", ms(client.uptime, { long: true }))
-        .addField("**Total Shards**", `${client.shards.size}`)
-        .setColor("#15f153");
-    message.channel.createMessage({ embed: embed });
+//import {Flask} from "../../server"
+exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    let name = args.join(" ");
+    (_a = message.member) === null || _a === void 0 ? void 0 : _a.edit({ nick: name });
+    let em = new embed_1.Embed()
+        .setAuthor("Nickname Edited", "https://invite.giveawayboat.com/", client.user.avatarURL)
+        .setDescription(`Nick Name Sucessfuly Edited To '${name}'`);
+    message.channel.createMessage({ embed: em });
 });
 exports.help = {
-    name: "uptime",
-    description: "shows how long bot has been active",
-    usage: "!uptime",
-    example: "!uptime",
-    perms: [permissionInt_1.Permission.SEND_MESSAGES]
+    name: "nick",
+    description: "username",
+    usage: "-nick <user> <nickname> [reason]",
+    example: "",
+    perms: [permissionInt_1.Permission.CHANGE_NICKNAME]
 };
 exports.conf = {
-    aliases: ["up"],
+    aliases: ["n"],
     cooldown: 5 // Seconds
 };
