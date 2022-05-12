@@ -1,18 +1,25 @@
 import Eris from "eris";
+import { db } from "../database";
 import { Embed } from "../utils/embed";
-let permsnothave:number = 0;
 module.exports = async (client:any, message:any) => {
   if (message.author.bot) return;
   
   if (message.channel.type === 1) return; // DM channel. More info: https://github.com/abalabahaha/eris/blob/master/lib/Constants.js
   
-  let prefix = client.config.prefix;
+  const getprefix = (
+    await db.query(`
+    SELECT * FROM guild_data 
+    WHERE guild_id = ${message.guildID};
+    `)
+).rows[0].prefix
+    
+  let prefix =  getprefix || client.config.prefix ;
   
   if (!message.content.startsWith(prefix)) return;
   
   let args = message.content.slice(prefix.length).trim().split(/ +/g);
   let msg = message.content.toLowerCase();
-  let cmd = args.shift().toLowerCase();
+  let cmd = args.shift().toUpperCase();
   let sender = message.author;
   
   let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
@@ -20,35 +27,35 @@ module.exports = async (client:any, message:any) => {
 
   let permissionRequired = commandFile.help.perms;
   let sh = message.member?.permissions
-  let slh = message.member?.permissions.json;
   let em = new Embed()
       .setAuthor("Flask: Permissions","https://invite.giveawayboat.com/",client.user.avatarURL)
       .setDescription(`The Following Permissions Are Require For Executing This Command`)
       
       
-  if(slh){
+  if(permissionRequired){
     console.log(sh)
+    let permsnothave:number = 0;
+    
     permissionRequired.forEach((p:any) => {
       //@ts-ignore
-      if (!sh.has(p)) {
+      if (!sh.has(p) ) {
         //@ts-ignore
         em.addField(`Permission Integer ${Eris.Constants.Permissions[p]}`, `${p}`, false)
         permsnothave = permsnothave + 1
-        console.log("one perm mission " )
+        console.log("one perm missing " )
       } else {
         permsnothave = permsnothave + 0
         console.log("haha")
       }
 
-    },
-   
-    );
 
+    });
+    if(permsnothave > 0){
+      permissionRequired = 0
+     return message.channel.createMessage({embed:em})
+    }
   }
-  if(permsnothave >= 1){
-    permissionRequired = 0
-   return message.channel.createMessage({embed:em})
-  }
+  
   if (!client.cooldowns.has(commandFile.help.name)) client.cooldowns.set(commandFile.help.name, client.cooldowns);
   
   const member = message.member, now = Date.now(), timestamps = client.cooldowns.get(commandFile.help.name), cooldownAmount = (commandFile.conf.cooldown || 3) * 1000;

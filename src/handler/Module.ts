@@ -22,9 +22,9 @@ module.exports = (client:any) => {
             if (file.endsWith(".js")) {
 
               let prop = require(`${homePath}/prod/commands/${category}/${file}`);
-              client.commands.set(prop.help.name, prop);
-              prop.conf.aliases.forEach((alias: any) => client.aliases.set(alias, prop.help.name));
-              client.helps.get(category).cmds.push(prop.help.name);
+              client.commands.set(prop.help.name.toUpperCase(), prop);
+              prop.conf.aliases.forEach((alias: any) => client.aliases.set(alias.toUpperCase(), prop.help.name.toUpperCase()));
+              client.helps.get(category).cmds.push(prop.help.name.toUpperCase());
 
             };
           });

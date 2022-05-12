@@ -1,6 +1,14 @@
-
-let h = ['hh',"#3da5b3"]
-let k = h[1].replace("#","0x")
-console.log(k)
-let j = parseInt(k,16)
-console.log(j);
+const bb = [
+    '<@235148962103951360>',
+    '<@&887159642004803695>',
+    'ja',
+    'sks',
+    'ossojs',
+    'sk',
+    'o',
+    'sjk',
+    's',
+    'oooo'
+]
+bb.splice(0,2)
+console.log(bb)

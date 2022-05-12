@@ -61,7 +61,7 @@ exports.help = {
   description: "Displays Commands About THe Bit",
   usage: "-help",
   example: "-help ping",
-  perms: [Permission.SEND_MESSAGES]
+  perms: []
 };
 
 exports.conf = {

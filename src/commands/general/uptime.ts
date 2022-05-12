@@ -8,6 +8,8 @@ exports.run = async (client: Eris.Client, message:any) => {
     .addField("**Active For**:",ms(client.uptime, {long : true}))
     .addField("**Total Shards**",`${client.shards.size}`)
     .setColor("#15f153")
+    .setFooter("Flask",client.user.avatarURL)
+    .setTimestamp(new Date())
     
     message.channel.createMessage({embed:embed});
 };
