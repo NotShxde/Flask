@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const embed_1 = require("../../utils/embed");
-const permissionInt_1 = require("../../utils/permissionInt");
 exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
     let prefix = client.config.prefix;
     if (!args[0]) {
@@ -69,7 +68,7 @@ exports.help = {
     description: "Displays Commands About THe Bit",
     usage: "-help",
     example: "-help ping",
-    perms: [permissionInt_1.Permission.SEND_MESSAGES]
+    perms: []
 };
 exports.conf = {
     aliases: ['hp'],

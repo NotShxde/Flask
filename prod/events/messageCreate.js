@@ -13,49 +13,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const eris_1 = __importDefault(require("eris"));
+const database_1 = require("../database");
 const embed_1 = require("../utils/embed");
-let permsnothave = 0;
 module.exports = (client, message) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a;
     if (message.author.bot)
         return;
     if (message.channel.type === 1)
         return; // DM channel. More info: https://github.com/abalabahaha/eris/blob/master/lib/Constants.js
-    let prefix = client.config.prefix;
+    const getprefix = (yield database_1.db.query(`
+    SELECT * FROM guild_data 
+    WHERE guild_id = ${message.guildID};
+    `)).rows[0].prefix;
+    let prefix = getprefix || client.config.prefix;
     if (!message.content.startsWith(prefix))
         return;
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let msg = message.content.toLowerCase();
-    let cmd = args.shift().toLowerCase();
+    let cmd = args.shift().toUpperCase();
     let sender = message.author;
     let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
     if (!commandFile)
         return;
     let permissionRequired = commandFile.help.perms;
     let sh = (_a = message.member) === null || _a === void 0 ? void 0 : _a.permissions;
-    let slh = (_b = message.member) === null || _b === void 0 ? void 0 : _b.permissions.json;
     let em = new embed_1.Embed()
         .setAuthor("Flask: Permissions", "https://invite.giveawayboat.com/", client.user.avatarURL)
         .setDescription(`The Following Permissions Are Require For Executing This Command`);
-    if (slh) {
+    if (permissionRequired) {
         console.log(sh);
+        let permsnothave = 0;
         permissionRequired.forEach((p) => {
             //@ts-ignore
             if (!sh.has(p)) {
                 //@ts-ignore
                 em.addField(`Permission Integer ${eris_1.default.Constants.Permissions[p]}`, `${p}`, false);
                 permsnothave = permsnothave + 1;
-                console.log("one perm mission ");
+                console.log("one perm missing ");
             }
             else {
                 permsnothave = permsnothave + 0;
                 console.log("haha");
             }
         });
-    }
-    if (permsnothave >= 1) {
-        permissionRequired = 0;
-        return message.channel.createMessage({ embed: em });
+        if (permsnothave > 0) {
+            permissionRequired = 0;
+            return message.channel.createMessage({ embed: em });
+        }
     }
     if (!client.cooldowns.has(commandFile.help.name))
         client.cooldowns.set(commandFile.help.name, client.cooldowns);

@@ -8,17 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+const database_1 = require("../database");
 module.exports = (client, guild) => __awaiter(void 0, void 0, void 0, function* () {
-    const arr = Array.from(client.commands.values());
-    arr.forEach((k) => {
-        let cmdname = k.help.name;
-        let desc = k.help.description;
-        console.log(guild.id);
-        client.createGuildCommand(guild.id, {
-            name: cmdname,
-            description: desc,
-            type: 1
-        }).then(() => console.log(`created ${k.help.name}`))
-            .catch(console.error);
-    });
+    const addid = (yield database_1.db.query(`
+        INSERT INTO guild_data (guild_id,prefix)
+        VALUES ('${guild.id}','-');
+        `));
 });

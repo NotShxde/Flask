@@ -17,7 +17,9 @@ exports.run = (client, message) => __awaiter(void 0, void 0, void 0, function* (
         .setAuthor("Flask: Uptime", "https://invite.giveawayboat.com/", client.user.avatarURL)
         .addField("**Active For**:", ms(client.uptime, { long: true }))
         .addField("**Total Shards**", `${client.shards.size}`)
-        .setColor("#15f153");
+        .setColor("#15f153")
+        .setFooter("Flask", client.user.avatarURL)
+        .setTimestamp(new Date());
     message.channel.createMessage({ embed: embed });
 });
 exports.help = {
