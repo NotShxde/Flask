@@ -2,7 +2,7 @@
   "name": "flask",
   "version": "1.0.0",
   "description": "A Discord Bot (Eris) template from Blob Project.",
-  "main": "server.js",
+  "main": "./prod/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node -r dotenv/config ./prod/server.js"
