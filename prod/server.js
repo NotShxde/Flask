@@ -4,6 +4,18 @@
   - https://github.com/abalabahaha/eris/blob/master/lib/Constants.js
   - https://abal.moe/Eris/docs/reference
 */
+const express = require('express');
+
+const app = express();
+
+
+app.get('/', (req, res) => {
+  res.send('Hello Express app!')
+});
+
+app.listen(3000, () => {
+  console.log('server started');
+});
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Flask = void 0;
 const eris_1 = require("eris");
