@@ -4,6 +4,7 @@
   "description": "A Discord Bot (Eris) template from Blob Project.",
   "main": "server.js",
   "scripts": {
+    "build":"tsc",
     "start": "node -r dotenv/config ./prod/server.js"
   },
   "dependencies": {
