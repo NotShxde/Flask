@@ -1,10 +1,7 @@
 import { Pool} from 'pg';
+const connectionString = 'postgres://plybsfkzimgkwn:0968ac1d1535315945601db4f90a53d471da7cd40f95c654db0aee2834855069@ec2-63-32-248-14.eu-west-1.compute.amazonaws.com:5432/d9ggsk373lbj9e'
 const pool = new Pool({
-    host: "localhost",
-    port: 5432,
-    user: "notshade",
-    database: 'flask',
-    password: "slq"
+    connectionString,
   });
 
   pool.connect()
