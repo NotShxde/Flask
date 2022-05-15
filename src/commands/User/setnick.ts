@@ -6,6 +6,7 @@ exports.run = async (client:any, message:Eris.Message,args:any[]) => {
     let name = args.join(" ")
     message.member?.edit({nick: name})
     let em = new Embed()
+    .setFooter("Flask ",client.user.avatarURL)
     .setAuthor("Nickname Edited","https://invite.giveawayboat.com/",client.user.avatarURL)
     .setDescription(`Nick Name Sucessfuly Edited To '${name}'`)
     message.channel.createMessage({embed: em})

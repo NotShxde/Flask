@@ -22,10 +22,20 @@ pool.query(`
   res;
 })
 pool.query(`
+ CREATE TABLE IF NOT EXISTS audit_log(
+  enabled BOOLEAN NOT NULL,
+  guild_id BIGSERIAL NOT NULL,
+  audit_id BIGINT );
+`, (err, res) => {
+    if (err)
+        throw err;
+    res;
+});
+pool.query(`
   CREATE TABLE IF NOT EXISTS warn_data(
      id uuid DEFAULT uuid_generate_v4 (),
-     guild_id BIGINT NOT NULL,
-     gwarn_id BIGSERIAL NOT NULL,
+     issuedms  BIGSERIAL NOT NULL,
+     guild_id BIGSERIAL NOT NULL,
      user_id BIGINT NOT NULL,
      reason TEXT NOT NULL 
   );
@@ -33,4 +43,5 @@ pool.query(`
   if(err)throw err;
   res;
 })
+
 export const db = pool;

@@ -1,38 +1,58 @@
 import Eris from "eris";
+import ms from "ms";
+import { db } from "../../database";
 import { Colors } from "../../utils/colors";
 import { Embed } from "../../utils/embed";
 
-exports.run = async (client:any, message:any,args:any[]) => {
+exports.run = async (client:Eris.Client, message:Eris.Message,args:any[]) => {
     let embed = new Embed()
 .setAuthor("Role Added", "https://invite.giveawayboat.com/", client.user.avatarURL)
 .setTimestamp(new Date())
 .setColor(Colors.DEFAULT_EMBED_COLOR)
-  //-ban @wumpus  stealing my cake 7
-  //       0          2,3,4,5,6,7  pop()
+//id | issuedms | guild_id | gwarn_id | user_id | reason
+//        0   1   
+//warn @user reason
+embed.setFooter("Flask ",client.user.avatarURL)
+if(!args[0]){
+  embed.setDescription("Please Mention a User To Warn");
+  message.channel.createMessage({embed:embed})
+}
+let reason = "Not Specified"
+if(args[1]){
+  let v = args.splice(0,1)
+  console.log(args)
+  reason = args.join(" ");
+}
+var date = new Date();// some mock date
+//@ts-ignore
+let milliseconds = Math.floor(new Date().getTime() / 1000)
+console.log(milliseconds);
 
-  let usertobebanned = message.mentions[0];
-  if(!usertobebanned){
-    embed.setDescription("Please Provide The User You Want To Ban")   
-    return message.channel.createMessage({embed:embed});
-  }
+let usertobewarned:any = message.mentions[0];
+if(!usertobewarned){
   
+    embed.setDescription("Please Mention A User To Warn")
+    return message.channel.createMessage({embed:embed})
+  }
 
-  try{
-    const n = args
-      let uselwss = n.shift()
-      let daystobem = n.join(" ");
-  if(!daystobem) daystobem = 'No Reason Specified';
-      let memberDm = await client.getDMChannel(usertobebanned.id)
-      .catch(console.error)
+let memberDm = await client.getDMChannel(usertobewarned.id);
+
+  await db.query(`
+  INSERT INTO warn_data(issuedms,guild_id,user_id,reason)
+  VALUES('${milliseconds}','${message.guildID}','${usertobewarned.id}','${reason}');
+  
+  `).catch(console.error).finally(() => {
+    //@ts-ignore
     let j = client.guilds.get(message.guildID)
-        embed.setDescription(`You Have Been Banned From \`${j?.name}\``)
-        embed.addField("__**Reason: **__",daystobem,true)
-      client.createMessage(memberDm.id,{embed:embed})
-      .catch(console.error)
-        embed.setDescription(`User ${usertobebanned.mention} Have Been Banned From ${j?.name}`)
-        await client.banGuildMember(message.guildID,usertobebanned.id,0,daystobem)
-      return message.channel.createMessage({embed:embed})
-  }catch(err){console.error(err)}
+  
+    embed.setDescription(`You Have Been Warned in \`${j?.name}\``)
+    embed.addField("__**Reason: **__",reason,true)
+    
+    client.createMessage(memberDm.id,{embed:embed})
+  
+    embed.setDescription(`Warned User ${usertobewarned.mention}`)
+  message.channel.createMessage({embed:embed})
+  })
 };
 
 exports.help = {
@@ -44,6 +64,6 @@ exports.help = {
 };
 
 exports.conf = {
-  aliases: ['bean'],
+  aliases: ['warn','w'],
   cooldown: 5 // Seconds
 };

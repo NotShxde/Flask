@@ -11,7 +11,7 @@ exports.run = async (client: any, message: any, args: any[]) => {
         .setAuthor("Role Added", "https://invite.giveawayboat.com/", client.user.avatarURL)
         .setTimestamp(new Date())
         .setColor(Colors.DEFAULT_EMBED_COLOR)
-
+        .setFooter("Flask ",client.user.avatarURL)
     let member = message.mentions;
     if (member.length < 1) { embed.setDescription("Mention The User First") 
 return message.channel.createMessage({embed:embed})}
