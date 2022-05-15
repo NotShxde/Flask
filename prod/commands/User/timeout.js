@@ -22,7 +22,8 @@ exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, funct
     let embed = new embed_1.Embed()
         .setAuthor("Role Added", "https://invite.giveawayboat.com/", client.user.avatarURL)
         .setTimestamp(new Date())
-        .setColor(colors_1.Colors.DEFAULT_EMBED_COLOR);
+        .setColor(colors_1.Colors.DEFAULT_EMBED_COLOR)
+        .setFooter("Flask ", client.user.avatarURL);
     let member = message.mentions;
     if (member.length < 1) {
         embed.setDescription("Mention The User First");

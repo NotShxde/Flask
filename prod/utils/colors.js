@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hexRegex = exports.Colors = void 0;
+exports.channelHex = exports.hexRegex = exports.Colors = void 0;
 const color_hex = {
     'BLACK': '#000000',
     'BLUE': '#0000FF',
@@ -12,5 +12,7 @@ const color_hex = {
     DEFAULT_EMBED_COLOR: '#999395'
 };
 const HEX_REGEX = /^#?([0-9a-f]{6}|[0-9a-f]{3})$/i;
+const ChannelsPattern = /<#(\d{17,19})>/g;
 exports.Colors = color_hex;
 exports.hexRegex = HEX_REGEX;
+exports.channelHex = ChannelsPattern;

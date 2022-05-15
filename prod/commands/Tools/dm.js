@@ -11,25 +11,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const embed_1 = require("../../utils/embed");
 const permissionInt_1 = require("../../utils/permissionInt");
-//import {Flask} from "../../server"
 exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    let name = args.join(" ");
-    (_a = message.member) === null || _a === void 0 ? void 0 : _a.edit({ nick: name });
     let em = new embed_1.Embed()
-        .setFooter("Flask ", client.user.avatarURL)
-        .setAuthor("Nickname Edited", "https://invite.giveawayboat.com/", client.user.avatarURL)
-        .setDescription(`Nick Name Sucessfuly Edited To '${name}'`);
+        .setAuthor("Flask: DM", "https://invite.giveawayboat.com/", client.user.avatarURL);
+    let j = message.mentions[0];
+    if (!j) {
+        em.setDescription("Please Provide a User To Dm");
+        return message.channel.createMessage({ embed: em });
+    }
+    let memberDm = yield client.getDMChannel(j.id);
+    let useless = args.splice(0, 1);
+    let la = args.join(" ");
+    if (!la) {
+        em.setDescription("Please Provide Message To Send");
+        return message.channel.createMessage({ embed: em });
+    }
+    client.createMessage(memberDm.id, { content: la });
+    em.setDescription(`Succesfully Sent DM to ${j.mention}`);
     message.channel.createMessage({ embed: em });
 });
 exports.help = {
-    name: "nick",
-    description: "username",
-    usage: "-nick <user> <nickname> [reason]",
-    example: "",
-    perms: [permissionInt_1.Permission.CHANGE_NICKNAME]
+    name: "dm",
+    description: "dms a user",
+    usage: "-dm <@user>",
+    example: "-dm @wumpy",
+    perms: [permissionInt_1.Permission.MANAGE_MESSAGES]
 };
 exports.conf = {
-    aliases: ["n"],
+    aliases: [],
     cooldown: 5 // Seconds
 };

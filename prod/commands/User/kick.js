@@ -18,6 +18,7 @@ exports.run = (client, message, args) => __awaiter(void 0, void 0, void 0, funct
         .setColor(colors_1.Colors.DEFAULT_EMBED_COLOR);
     //-ban @wumpus  stealing my cake 7
     //       0          2,3,4,5,6,7  pop()
+    embed.setFooter("Flask ", client.user.avatarURL);
     let usertobebanned = message.mentions[0];
     if (!usertobebanned) {
         embed.setDescription("Please Provide The User You Want To Kick");

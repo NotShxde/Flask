@@ -11,8 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../database");
 module.exports = (client, guild) => __awaiter(void 0, void 0, void 0, function* () {
-    const addid = (yield database_1.db.query(`
+    yield database_1.db.query(`
         INSERT INTO guild_data (guild_id,prefix)
         VALUES ('${guild.id}','-');
-        `));
+        `);
+    yield database_1.db.query(`
+        INSERT INTO audit_log (enabled,guild_id)
+        VALUES (FALSE,${guild.id});
+        `);
 });
