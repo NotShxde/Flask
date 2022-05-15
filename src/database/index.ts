@@ -10,6 +10,12 @@ const pool = new Pool({
   pool.connect()
     .then(() => console.log('[INFO]','CONNECTION HAS BEEN ESTABLISHED WITH DATABASE'))
     .catch((err) => console.log('[ERROR]',`Problem with connecting to PG database: \n ${err}`)); 
+pool.query(`
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+`,(err,res)=> {
+  if(err)throw err;
+  res;
+})
 
 pool.query(`
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
